@@ -1,2 +1,5 @@
+examples/AddAndDisplay.bf
 examples/HelloWorld.bf
+examples/CellSize.bf
+examples/ROT13.bf
 

@@ -57,6 +57,7 @@ static void iterate_examples(const char *examples_file)
 
 int32_t interpret_bf(void)
 {
+    int32_t sc = 0;
     if(0 == it.text_size)
     {
         free(it.text);
@@ -64,7 +65,7 @@ int32_t interpret_bf(void)
         return -1;
     }
     char c = EOF;
-    for(size_t pc = 0, dp = 0, mb = 0; pc < it.text_size; ++pc)
+    for(size_t pc = 0, dp = 0, mb = 0; ((pc < it.text_size) && (0 == sc)); ++pc)
     {
         switch(it.text[pc])
         {
@@ -80,6 +81,7 @@ int32_t interpret_bf(void)
                 if(dp > MAX_DATA_SIZE)
                 {
                     printf("data pointer exceeded max size\n");
+                    sc = -1;
                 }
                 break;
             case ',':
@@ -128,7 +130,8 @@ int32_t interpret_bf(void)
     }
     free(it.text);
     free(it.data);
-    return 0;
+    printf("\n");
+    return sc;
 }
 
 int32_t load_bf_file(const char *bf_file)
@@ -154,6 +157,7 @@ int32_t load_bf_file(const char *bf_file)
             printf("Not enough heap to allocate memory for text\n");
             return -1;
         }
+        memset(it.text, 0, MAX_TEXT_SIZE * sizeof(uint8_t));
         it.data = (uint8_t *)malloc(MAX_DATA_SIZE * sizeof(uint8_t));
         if(NULL == it.data)
         {
@@ -161,6 +165,7 @@ int32_t load_bf_file(const char *bf_file)
             printf("Not enough heap to allocate memory for data\n");
             return -1;
         }
+        memset(it.data, 0, MAX_DATA_SIZE * sizeof(uint8_t));
         while(EOF != (current_char = fgetc(file)))
         {
             if(NULL != strchr(bf_symbols, current_char))
