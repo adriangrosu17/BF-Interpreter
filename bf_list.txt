@@ -1,5 +1,7 @@
 examples/AddAndDisplay.bf
 examples/HelloWorld.bf
 examples/CellSize.bf
+examples/Pi.bf
+examples/Squares.bf
 examples/ROT13.bf
 

@@ -55,14 +55,21 @@ static void iterate_examples(const char *examples_file)
     }
 }
 
+static inline int32_t free_it(int32_t sc)
+{
+    free(it.text);
+    free(it.data);
+    printf("\n");
+    return sc;
+}
+
 int32_t interpret_bf(void)
 {
     int32_t sc = 0;
     if(0 == it.text_size)
     {
-        free(it.text);
-        free(it.data);
-        return -1;
+        sc = -1;
+        return free_it(sc);
     }
     char c = EOF;
     for(size_t pc = 0, dp = 0, mb = 0; ((pc < it.text_size) && (0 == sc)); ++pc)
@@ -85,12 +92,14 @@ int32_t interpret_bf(void)
                 }
                 break;
             case ',':
-                while(EOF == c)
+                printf("\nInsert a valid ASCII character: ");
+                c = getchar();
+                if(c == EOF)
                 {
-                    printf("\nInsert a valid ASCII character: ");
-                    c = fgetc(stdin);
+                    return free_it(sc);
                 }
                 it.data[dp] = (uint8_t)c;
+                while((c = getchar()) != '\n');
                 break;
             case '.':
                 printf("%c", it.data[dp]);
@@ -128,10 +137,7 @@ int32_t interpret_bf(void)
                 break;
         }
     }
-    free(it.text);
-    free(it.data);
-    printf("\n");
-    return sc;
+    return free_it(sc);
 }
 
 int32_t load_bf_file(const char *bf_file)
@@ -161,7 +167,6 @@ int32_t load_bf_file(const char *bf_file)
         it.data = (uint8_t *)malloc(MAX_DATA_SIZE * sizeof(uint8_t));
         if(NULL == it.data)
         {
-
             printf("Not enough heap to allocate memory for data\n");
             return -1;
         }
@@ -195,6 +200,7 @@ int main(int argc, char *argv[])
     {
         printf("Incorrect number of arguments\n");
     }
+    printf("Exitting...\n");
     return 0;
 }
 
