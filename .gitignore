@@ -48,6 +48,7 @@
 *.pdb
 # vim swp files
 .*.*.swp
+.*.swp
 # Kernel Module Compile Results
 *.mod*
 *.cmd

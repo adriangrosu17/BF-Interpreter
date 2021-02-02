@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bf.h"
+#include <bf.h>
 
 #define LINE_BUFFER_SIZE (256)
 #define MAX_TEXT_SIZE (16 * 1024)
