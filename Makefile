@@ -1,7 +1,15 @@
-TARGET_EXEC ?= interpreter.elf
+TARGET_WIN ?= n
+ifeq ($(TARGET_WIN), y)
+	CC = x86_64-w64-mingw32-gcc
+	CXX = x86_64-w64-mingw32-g++
+	EXT = exe
+else
+	CC = gcc
+	CXX = g++
+	EXT = elf
+endif
 
-CC = gcc
-CXX = g++
+TARGET_EXEC ?= interpreter.$(EXT)
 BUILD_DIR ?= build
 SRC_DIRS ?= src
 DEBUG ?= n
@@ -36,11 +44,6 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(MKDIR_P) $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-run:
-	./$(BUILD_DIR)/$(TARGET_EXEC) $(filter-out $@,$(MAKECMDGOALS))
-%:
-	@:
-
 .PHONY: clean
 
 clean:
@@ -48,3 +51,4 @@ clean:
 -include $(DEPS)
 
 MKDIR_P ?= mkdir -p
+
